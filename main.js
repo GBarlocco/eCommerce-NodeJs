@@ -1,7 +1,7 @@
 const express = require(`express`);
 const { Router } = express;
 
-const Contenedor = require(`./contenedor`);
+const CrudProductos = require(`./dataBase/crudProductos`);
 
 const app = express();
 
@@ -25,12 +25,12 @@ const server = app.listen(PORT, () => console.log(`Servidor HHTP escuchando puer
 server.on(`error`, err => console.log(`error en el servidor ${err}`));
 
 
-let myContenedor = new Contenedor(`productos.txt`);
+let myCrudProductos = new CrudProductos(`./dataBase/productos.txt`);
 
 productosRouter.get(`/`, (req, res) => {
     ; (async () => {
         try {
-            let allProducts = await myContenedor.getAll();
+            let allProducts = await myCrudProductos.getAll();
             return res.json(allProducts);
         } catch (err) {
             return res.status(404).json({
@@ -43,7 +43,7 @@ productosRouter.get(`/`, (req, res) => {
 productosRouter.get(`/:id`, (req, res) => {
     ; (async () => {
         try {
-            let productbyId = await myContenedor.getById(req.params.id);
+            let productbyId = await myCrudProductos.getById(req.params.id);
             if (productbyId.length == 0) {
                 return res.status(404).json({
                     error: `Error producto no encontrado`
@@ -73,7 +73,7 @@ productosRouter.post(`/`, (req, res) => {
             thumbnail: `${url}`
         };
         console.table(newProducto);
-        const id = await myContenedor.save(newProducto);
+        const id = await myCrudProductos.save(newProducto);
 
         return res.json(`El id asignado es ${id}`);
     })();
@@ -82,7 +82,7 @@ productosRouter.post(`/`, (req, res) => {
 productosRouter.put(`/:id`, (req, res) => {
     ; (async () => {
         const id = Number(req.params.id);
-        let allProducts = await myContenedor.getAll();
+        let allProducts = await myCrudProductos.getAll();
         const productIndex = allProducts.findIndex(product => product.id === id);
 
         if (productIndex < 0) {
@@ -95,7 +95,7 @@ productosRouter.put(`/:id`, (req, res) => {
         allProducts[productIndex].price = req.body.price;
         allProducts[productIndex].thumbnail = req.body.thumbnail;
 
-        await myContenedor.write(allProducts, `Mensaje modificado`);
+        await myCrudProductos.write(allProducts, `Mensaje modificado`);
         return res.json(`Se actualizó el id ${id}`);
     })();
 });
@@ -104,7 +104,7 @@ productosRouter.delete(`/:id`, (req, res) => {
     ; (async () => {
         try {
             const id = Number(req.params.id);
-            await myContenedor.deleteById(id);
+            await myCrudProductos.deleteById(id);
 
             return res.json(`Se eliminó de forma correcta el ID:${id}`);
         } catch (err) {
