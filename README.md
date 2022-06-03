@@ -45,23 +45,6 @@ id, timestamp(carrito), productos: { id, timestamp(producto), nombre, descripcio
 
 5- Realizar la prueba de funcionalidad completa en el ámbito local (puerto 8080) y en glitch.com
 
-
-
-## Academy
-> [CODERHOUSE](https://www.coderhouse.com.uy)
-
-## Course
-> [Node Js](https://www.coderhouse.com.uy/online/programacion-backend)
-
-## Teach & tutor
-> <p>Group: 30975.</p>
-> <p>Teach: Iram Gutierrez</p>
-> <p>Tutor: Gonzalo Moure.</p> 
-
-## Author
-> <p>Gastón Barlocco. </p>
-> <p>Email: barlocco@hotmail.es </p>
-
 ## Test API - Postman
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white)
 > [Documentación API](https://documenter.getpostman.com/view/15433212/Uz5FLHXE#cfec1e21-3b0d-44e3-bc97-65aa64bf9392)
@@ -79,3 +62,18 @@ Run the application locally
 - [Documentation](https://www.npmjs.com/package/nodemon) nodemon
 - [Documentation](https://expressjs.com/es/) express
 - [Documentation](https://www.postman.com) Postman
+
+## Academy
+> [CODERHOUSE](https://www.coderhouse.com.uy)
+
+## Course
+> [Node Js](https://www.coderhouse.com.uy/online/programacion-backend)
+
+## Teach & tutor
+> <p>Group: 30975.</p>
+> <p>Teach: Iram Gutierrez</p>
+> <p>Tutor: Gonzalo Moure.</p> 
+
+## Author
+> <p>Gastón Barlocco. </p>
+> <p>Email: barlocco@hotmail.es </p>
