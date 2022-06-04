@@ -68,13 +68,20 @@ productosRouter.post(`/`, (req, res) => {
     ; (async () => {
         const name = req.body.nombre;
         const price = Number(req.body.precio);
-        const url = req.body.url;
-
+        const url = req.body.thumbnail;
+        const description = req.body.descripcion;
+        const date = new Date().toDateString();
+        const code = Number(req.body.codigo);
+        const stock = Number(req.body.stock);
 
         const newProducto = {
-            title: `${name}`,
-            price: price,
-            thumbnail: `${url}`
+            timestamp: date,
+            nombre: `${name}`,
+            descripcion: `${description}`,
+            codigo: code,
+            thumbnail: `${url}`,
+            precio: price,
+            stock: stock
         };
         const id = await myCrudProductos.save(newProducto);
 
@@ -85,6 +92,14 @@ productosRouter.post(`/`, (req, res) => {
 productosRouter.put(`/:id`, (req, res) => {
     ; (async () => {
         const id = Number(req.params.id);
+        const name = req.body.nombre;
+        const price = Number(req.body.precio);
+        const url = req.body.thumbnail;
+        const description = req.body.descripcion;
+        const date = new Date().toDateString();
+        const code = Number(req.body.codigo);
+        const stock = Number(req.body.stock);
+
         let allProducts = await myCrudProductos.getAll();
         const productIndex = allProducts.findIndex(product => product.id === id);
 
@@ -94,9 +109,13 @@ productosRouter.put(`/:id`, (req, res) => {
             });
         }
 
-        allProducts[productIndex].title = req.body.title;
-        allProducts[productIndex].price = req.body.price;
-        allProducts[productIndex].thumbnail = req.body.thumbnail;
+        allProducts[productIndex].nombre = name;
+        allProducts[productIndex].thumbnail = url;
+        allProducts[productIndex].timestamp = date;
+        allProducts[productIndex].descripcion = description;
+        allProducts[productIndex].codigo = code;
+        allProducts[productIndex].precio = price;
+        allProducts[productIndex].stock = stock;
 
         await myCrudProductos.write(allProducts, `Mensaje modificado`);
         return res.json(`Se actualizó el id ${id}`);
@@ -112,7 +131,7 @@ productosRouter.delete(`/:id`, (req, res) => {
             return res.json(`Se eliminó de forma correcta el ID:${id}`);
         } catch (err) {
             return res.status(404).json({
-                error: `Se detecto un error --> ${err}`
+                error: `Error ${err}`
             });
         }
     })();
@@ -120,8 +139,9 @@ productosRouter.delete(`/:id`, (req, res) => {
 
 carritoRouter.get(`/:id/productos`, (req, res) => {
     ; (async () => {
+        let idCart = req.params.id;
         try {
-            let productsbyId = await myCrudCarritos.getProductsByID(req.params.id);
+            let productsbyId = await myCrudCarritos.getProductsByID(idCart);
             if (productsbyId.length == 0) {
                 return res.json(`El carrito se encuentra vacío`);
             } else {
@@ -137,7 +157,7 @@ carritoRouter.get(`/:id/productos`, (req, res) => {
 
 carritoRouter.post(`/`, (req, res) => {
     ; (async () => {
-        const id = await myCrudCarritos.create();
+        const id = await myCrudCarritos.createCart();
         return res.json(`Nuevo carrito asignado, ID: ${id}`);
     })();
 });
@@ -176,7 +196,7 @@ carritoRouter.post(`/:idCar/:idProd`, (req, res) => {
             };
 
             allCarts[cartIndex].products.push(productbyId[0]);
-            
+
             await myCrudCarritos.write(allCarts, `producto agregado al carrito`);
             return res.json(`Se agregó el producto con id ${idProduct} al carrito con id ${idCart}`);
 
@@ -189,7 +209,32 @@ carritoRouter.post(`/:idCar/:idProd`, (req, res) => {
 });
 
 carritoRouter.delete(`/:id`, (req, res) => {
+    ; (async () => {
+        try {
+            const idCart = Number(req.params.id);
+            await myCrudCarritos.deleteCartById(idCart);
+
+            return res.json(`Se eliminó de forma correcta el carrito con ID:${idCart}`);
+        } catch (err) {
+            return res.status(404).json({
+                error: `Error ${err}`
+            });
+        }
+    })();
 });
 
 carritoRouter.delete(`/:id/productos/:id_prod`, (req, res) => {
+    ; (async () => {
+        const idCart = Number(req.params.id);
+        const idProduct = Number(req.params.id_prod);
+        try {
+            await myCrudCarritos.deleteProductById(idCart, idProduct);
+
+            return res.json(`Producto  con ID: ${idProduct} del carrito con ID ${idCart} fue eliminado`);
+        } catch (err) {
+            return res.status(404).json({
+                error: `Error ${err}`
+            });
+        }
+    })();
 });

@@ -24,9 +24,9 @@ class Contenedor {
         }
     }
 
-    async create() {
+    async createCart() {
         let newCart;
-        let date = new Date.toDateString();
+        let date = new Date().toDateString();
         let cart = {
             id: 0,
             timestamp: date,
@@ -50,12 +50,12 @@ class Contenedor {
         return cart.id;
     }
 
-    async getProductsByID(myId) {
+    async getProductsByID(idCart) {
 
         let data = await this.read();
         let datos = JSON.parse(data);
 
-        let result = datos.filter(cart => cart.id == myId);
+        let result = datos.filter(cart => cart.id == idCart);
         if (result.length == 0) {
             return [];
         } else {
@@ -80,19 +80,48 @@ class Contenedor {
         return datos;
     }
 
-    async deleteById(myId) {
+    async deleteCartById(idCart) {
         let data = await this.read();
         let datos = JSON.parse(data);
 
-        let product = datos.find(product => product.id == myId);
-        if (product) {
-            let index = datos.indexOf(product);
+        let cart = datos.find(cart => cart.id == idCart);
+        console.log("let cart = datos.find(cart => cart.id == idCart);");
+        console.log(cart);
+        if (cart) {
+            let index = datos.indexOf(cart);
+            console.log("let index = datos.indexOf(cart);");
             console.log(index);
             datos.splice(index, 1);
-            await this.write(datos, `Producto con ID: ${myId} eliminado`)
+            await this.write(datos, `Carrito con ID: ${idCart} eliminado`)
         } else {
-            console.log(`Producto con ID: ${myId} no existe`);
+            console.log(`Carrito con ID: ${idCart} no existe`);
         }
+    }
+
+    async deleteProductById(idC, idP) {
+        try {
+            let data = await this.read();
+            let datos = JSON.parse(data);
+
+            let cart = datos.find(cart => cart.id == idC);
+            let product = cart.products.find(product => product.id == idP);
+
+            if (cart && product) {
+                let indexProduct = cart.products.indexOf(product);
+                cart.products.splice(indexProduct, 1);
+                await this.write(datos, `Producto  con ID: ${idP} del carrito con ID ${idC} fue eliminado`);
+            } else {
+                if (!cart) {
+                    throw Error(`Error el carrito no existe`);
+                }
+                if (!product) {
+                    throw Error(`Error el producto no existe`);
+                }
+            }
+        } catch (err) {
+            throw Error(`Error  ${err}`);
+        }
+
     }
 
     async deleteAll() {

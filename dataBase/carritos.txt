@@ -1,77 +1,53 @@
 [
   {
-    "id": 4,
+    "id": 1,
     "timestamp": "Sat Jun 04 2022",
     "products": [
       {
-        "id": 1,
-        "timestamp": "20/10 - 17:0:47",
-        "nombre": "Escuadra",
-        "descripcion": "Escuadra de 45 cm marca PIZZINI",
-        "codigo": "1",
-        "thumbail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
-        "precio": "123.45",
-        "stock": "5"
+        "timestamp": "Sat Jun 04 2022",
+        "nombre": "Producto2 update",
+        "descripcion": "descripcion2",
+        "codigo": 2,
+        "thumbnail": "url2",
+        "precio": 2,
+        "stock": 22,
+        "id": 2
       },
       {
-        "title": "Producto update",
-        "price": 123,
-        "thumbnail": "url update ",
+        "timestamp": "Sat Jun 04 2022",
+        "nombre": "Producto3",
+        "descripcion": "descripcion3",
+        "codigo": 3,
+        "thumbnail": "url3",
+        "precio": 3,
+        "stock": 33,
         "id": 3
       },
       {
-        "title": "nuevo producto",
-        "price": 123,
-        "thumbnail": "url",
+        "timestamp": "Sat Jun 04 2022",
+        "nombre": "Producto4",
+        "descripcion": "descripcion4",
+        "codigo": 4,
+        "thumbnail": "url4",
+        "precio": 4,
+        "stock": 4,
         "id": 4
-      },
-      {
-        "title": "Producto update",
-        "price": 123,
-        "thumbnail": "url update ",
-        "id": 7
-      },
-      {
-        "title": "undefined",
-        "price": null,
-        "thumbnail": "undefined",
-        "id": 9
       }
     ]
   },
   {
-    "id": 5,
+    "id": 2,
     "timestamp": "Sat Jun 04 2022",
     "products": [
       {
-        "title": "nuevo producto",
-        "price": 123,
-        "thumbnail": "url",
-        "id": 4
-      },
-      {
-        "title": "Producto update",
-        "price": 123,
-        "thumbnail": "url update ",
-        "id": 3
-      },
-      {
-        "title": "Producto update",
-        "price": 123,
-        "thumbnail": "url update ",
-        "id": 3
-      },
-      {
-        "title": "Producto update",
-        "price": 123,
-        "thumbnail": "url update ",
-        "id": 3
-      },
-      {
-        "title": "Producto update",
-        "price": 123,
-        "thumbnail": "url update ",
-        "id": 3
+        "timestamp": "Sat Jun 04 2022",
+        "nombre": "Producto7",
+        "descripcion": "descripcion7",
+        "codigo": 7,
+        "thumbnail": "url7",
+        "precio": 7,
+        "stock": 7,
+        "id": 7
       }
     ]
   }
