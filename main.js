@@ -20,6 +20,10 @@ app.use(`/api/carrito`, carritoRouter);
 
 app.use(express.static(`public`));
 
+app.use((req, res, next) => {
+    res.status(404).send(`Error, ruta ${req.url} no implementada`);
+});
+
 const PORT = process.env.PORT || 8080;
 
 const server = app.listen(PORT, () => console.log(`Servidor HHTP escuchando puerto ${PORT}`));
