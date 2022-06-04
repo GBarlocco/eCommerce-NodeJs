@@ -5,16 +5,6 @@
     "products": [
       {
         "timestamp": "Sat Jun 04 2022",
-        "nombre": "Producto2 update",
-        "descripcion": "descripcion2",
-        "codigo": 2,
-        "thumbnail": "url2",
-        "precio": 2,
-        "stock": 22,
-        "id": 2
-      },
-      {
-        "timestamp": "Sat Jun 04 2022",
         "nombre": "Producto3",
         "descripcion": "descripcion3",
         "codigo": 3,

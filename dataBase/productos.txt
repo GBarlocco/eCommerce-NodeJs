@@ -11,7 +11,7 @@
   },
   {
     "timestamp": "Sat Jun 04 2022",
-    "nombre": "Producto",
+    "nombre": "Producto ",
     "descripcion": "descripcion2",
     "codigo": 2,
     "thumbnail": "url2",
