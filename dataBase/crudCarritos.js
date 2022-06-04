@@ -81,20 +81,20 @@ class Contenedor {
     }
 
     async deleteCartById(idCart) {
-        let data = await this.read();
-        let datos = JSON.parse(data);
+        try {
+            let data = await this.read();
+            let datos = JSON.parse(data);
 
-        let cart = datos.find(cart => cart.id == idCart);
-        console.log("let cart = datos.find(cart => cart.id == idCart);");
-        console.log(cart);
-        if (cart) {
-            let index = datos.indexOf(cart);
-            console.log("let index = datos.indexOf(cart);");
-            console.log(index);
-            datos.splice(index, 1);
-            await this.write(datos, `Carrito con ID: ${idCart} eliminado`)
-        } else {
-            console.log(`Carrito con ID: ${idCart} no existe`);
+            let cart = datos.find(cart => cart.id == idCart);
+            if (cart) {
+                let index = datos.indexOf(cart);
+                datos.splice(index, 1);
+                await this.write(datos, `Carrito con ID: ${idCart} eliminado`)
+            } else {
+                throw Error(`El carrito con id ${idCart} no existe`);
+            }
+        } catch (err) {
+            throw Error(`Error ${err}`);
         }
     }
 

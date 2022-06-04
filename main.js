@@ -15,57 +15,51 @@ app.use(express.static(`public`));
 const productosRouter = Router();
 const carritoRouter = Router();
 
-
 app.use(`/api/productos`, productosRouter);
 app.use(`/api/carrito`, carritoRouter);
 
 app.use(express.static(`public`));
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 const server = app.listen(PORT, () => console.log(`Servidor HHTP escuchando puerto ${PORT}`));
 
 server.on(`error`, err => console.log(`error en el servidor ${err}`));
 
-
 let myCrudProductos = new CrudProductos(`./dataBase/productos.txt`);
 let myCrudCarritos = new CrudCarritos(`./dataBase/carritos.txt`);
+let administrator = true;
 
-productosRouter.get(`/`, (req, res) => {
-    ; (async () => {
-        try {
-            let allProducts = await myCrudProductos.getAll();
-            return res.json(allProducts);
-        } catch (err) {
-            return res.status(404).json({
-                error: `Error ${err}`
-            });
-        }
-    })();
+productosRouter.get(`/`, async (req, res) => {
+    try {
+        let allProducts = await myCrudProductos.getAll();
+        return res.json(allProducts);
+    } catch (err) {
+        return res.status(404).json({
+            error: `Error ${err}`
+        });
+    }
 });
 
-productosRouter.get(`/:id`, (req, res) => {
-    ; (async () => {
-        try {
-            let productbyId = await myCrudProductos.getById(req.params.id);
-            if (productbyId.length == 0) {
-                return res.status(404).json({
-                    error: `Error producto no encontrado`
-                });
-            } else {
-                return res.json(productbyId);
-            }
-        } catch (err) {
+productosRouter.get(`/:id`, async (req, res) => {
+    try {
+        let productbyId = await myCrudProductos.getById(req.params.id);
+        if (productbyId.length == 0) {
             return res.status(404).json({
-                error: `Error ${err}`
+                error: `Error producto no encontrado`
             });
+        } else {
+            return res.json(productbyId);
         }
-    })();
+    } catch (err) {
+        return res.status(404).json({
+            error: `Error ${err}`
+        });
+    }
 });
 
-
-productosRouter.post(`/`, (req, res) => {
-    ; (async () => {
+productosRouter.post(`/`, async (req, res) => {
+    try {
         const name = req.body.nombre;
         const price = Number(req.body.precio);
         const url = req.body.thumbnail;
@@ -86,11 +80,15 @@ productosRouter.post(`/`, (req, res) => {
         const id = await myCrudProductos.save(newProducto);
 
         return res.json(`El id asignado es ${id}`);
-    })();
+    } catch (err) {
+        return res.status(404).json({
+            error: `Error ${err}`
+        });
+    }
 });
 
-productosRouter.put(`/:id`, (req, res) => {
-    ; (async () => {
+productosRouter.put(`/:id`, async (req, res) => {
+    try {
         const id = Number(req.params.id);
         const name = req.body.nombre;
         const price = Number(req.body.precio);
@@ -108,7 +106,6 @@ productosRouter.put(`/:id`, (req, res) => {
                 error: "producto no encontrado"
             });
         }
-
         allProducts[productIndex].nombre = name;
         allProducts[productIndex].thumbnail = url;
         allProducts[productIndex].timestamp = date;
@@ -119,28 +116,31 @@ productosRouter.put(`/:id`, (req, res) => {
 
         await myCrudProductos.write(allProducts, `Mensaje modificado`);
         return res.json(`Se actualizó el id ${id}`);
-    })();
+
+    } catch (err) {
+        return res.status(404).json({
+            error: `Error ${err}`
+        });
+    }
 });
 
-productosRouter.delete(`/:id`, (req, res) => {
-    ; (async () => {
-        try {
-            const id = Number(req.params.id);
-            await myCrudProductos.deleteById(id);
+productosRouter.delete(`/:id`, async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        await myCrudProductos.deleteById(id);
 
-            return res.json(`Se eliminó de forma correcta el ID:${id}`);
-        } catch (err) {
-            return res.status(404).json({
-                error: `Error ${err}`
-            });
-        }
-    })();
+        return res.json(`Se eliminó de forma correcta el ID:${id}`);
+    } catch (err) {
+        return res.status(404).json({
+            error: `Error ${err}`
+        });
+    }
 });
 
-carritoRouter.get(`/:id/productos`, (req, res) => {
-    ; (async () => {
-        let idCart = req.params.id;
+carritoRouter.get(`/:id/productos`, async (req, res) => {
+    if (administrator) {
         try {
+            let idCart = req.params.id;
             let productsbyId = await myCrudCarritos.getProductsByID(idCart);
             if (productsbyId.length == 0) {
                 return res.json(`El carrito se encuentra vacío`);
@@ -152,23 +152,36 @@ carritoRouter.get(`/:id/productos`, (req, res) => {
                 error: `Error ${err}`
             });
         }
-    })();
+    } else {
+        return res.status(404).json({
+            error: `Ruta no permitida, no es usuario con perfil administrador.`
+        });
+    }
 });
 
-carritoRouter.post(`/`, (req, res) => {
-    ; (async () => {
-        const id = await myCrudCarritos.createCart();
-        return res.json(`Nuevo carrito asignado, ID: ${id}`);
-    })();
-});
-
-
-carritoRouter.post(`/:idCar/:idProd`, (req, res) => {
-    ; (async () => {
-        let idCart = Number(req.params.idCar);
-        let idProduct = req.params.idProd;
-
+carritoRouter.post(`/`, async (req, res) => {
+    if (administrator) {
         try {
+            const id = await myCrudCarritos.createCart();
+            return res.json(`Nuevo carrito asignado, ID: ${id}`);
+        } catch (err) {
+            return res.status(404).json({
+                error: `Error ${err}`
+            });
+        }
+    } else {
+        return res.status(404).json({
+            error: `Ruta no permitida, no es usuario con perfil administrador.`
+        });
+    }
+});
+
+carritoRouter.post(`/:idCar/:idProd`, async (req, res) => {
+    if (administrator) {
+        try {
+            let idCart = Number(req.params.idCar);
+            let idProduct = req.params.idProd;
+
             let allCarts = await myCrudCarritos.getAll();
 
             const cartIndex = allCarts.findIndex(cart => cart.id === idCart);
@@ -205,29 +218,38 @@ carritoRouter.post(`/:idCar/:idProd`, (req, res) => {
                 error: `Error ${err}`
             });
         }
-    })();
+    } else {
+        return res.status(404).json({
+            error: `Ruta no permitida, no es usuario con perfil administrador.`
+        });
+    }
 });
 
-carritoRouter.delete(`/:id`, (req, res) => {
-    ; (async () => {
+carritoRouter.delete(`/:id`, async (req, res) => {
+    if (administrator) {
         try {
             const idCart = Number(req.params.id);
-            await myCrudCarritos.deleteCartById(idCart);
 
+            await myCrudCarritos.deleteCartById(idCart);
             return res.json(`Se eliminó de forma correcta el carrito con ID:${idCart}`);
         } catch (err) {
             return res.status(404).json({
                 error: `Error ${err}`
             });
         }
-    })();
+    } else {
+        return res.status(404).json({
+            error: `Ruta no permitida, no es usuario con perfil administrador.`
+        });
+    }
 });
 
-carritoRouter.delete(`/:id/productos/:id_prod`, (req, res) => {
-    ; (async () => {
-        const idCart = Number(req.params.id);
-        const idProduct = Number(req.params.id_prod);
+carritoRouter.delete(`/:id/productos/:id_prod`, async (req, res) => {
+    if (administrator) {
         try {
+            const idCart = Number(req.params.id);
+            const idProduct = Number(req.params.id_prod);
+
             await myCrudCarritos.deleteProductById(idCart, idProduct);
 
             return res.json(`Producto  con ID: ${idProduct} del carrito con ID ${idCart} fue eliminado`);
@@ -236,5 +258,9 @@ carritoRouter.delete(`/:id/productos/:id_prod`, (req, res) => {
                 error: `Error ${err}`
             });
         }
-    })();
+    } else {
+        return res.status(404).json({
+            error: `Ruta no permitida, no es usuario con perfil administrador.`
+        });
+    }
 });
