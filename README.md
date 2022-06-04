@@ -12,7 +12,7 @@ Deberás entregar el estado de avance de tu aplicación eCommerce Backend, que i
 - PUT: '/:id' - Actualiza un producto por su id (disponible para administradores)
 - DELETE: '/:id' - Borra un producto por su id (disponible para administradores)
 
-2- El router base '/api/carrito' implementará tres rutas disponibles para usuarios y administradores:
+2- El router base '/api/carrito' implementará cinco rutas disponibles para usuarios y administradores:
 - POST: '/' - Crea un carrito y devuelve su id.
 - DELETE: '/:id' - Vacía un carrito y lo elimina.
 - GET: '/:id/productos' - Me permite listar todos los productos guardados en el carrito
