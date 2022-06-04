@@ -1,0 +1,78 @@
+[
+  {
+    "id": 4,
+    "timestamp": "Sat Jun 04 2022",
+    "products": [
+      {
+        "id": 1,
+        "timestamp": "20/10 - 17:0:47",
+        "nombre": "Escuadra",
+        "descripcion": "Escuadra de 45 cm marca PIZZINI",
+        "codigo": "1",
+        "thumbail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+        "precio": "123.45",
+        "stock": "5"
+      },
+      {
+        "title": "Producto update",
+        "price": 123,
+        "thumbnail": "url update ",
+        "id": 3
+      },
+      {
+        "title": "nuevo producto",
+        "price": 123,
+        "thumbnail": "url",
+        "id": 4
+      },
+      {
+        "title": "Producto update",
+        "price": 123,
+        "thumbnail": "url update ",
+        "id": 7
+      },
+      {
+        "title": "undefined",
+        "price": null,
+        "thumbnail": "undefined",
+        "id": 9
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "timestamp": "Sat Jun 04 2022",
+    "products": [
+      {
+        "title": "nuevo producto",
+        "price": 123,
+        "thumbnail": "url",
+        "id": 4
+      },
+      {
+        "title": "Producto update",
+        "price": 123,
+        "thumbnail": "url update ",
+        "id": 3
+      },
+      {
+        "title": "Producto update",
+        "price": 123,
+        "thumbnail": "url update ",
+        "id": 3
+      },
+      {
+        "title": "Producto update",
+        "price": 123,
+        "thumbnail": "url update ",
+        "id": 3
+      },
+      {
+        "title": "Producto update",
+        "price": 123,
+        "thumbnail": "url update ",
+        "id": 3
+      }
+    ]
+  }
+]

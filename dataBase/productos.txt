@@ -28,5 +28,17 @@
     "price": 123,
     "thumbnail": "url update ",
     "id": 7
+  },
+  {
+    "title": "undefined",
+    "price": null,
+    "thumbnail": "undefined",
+    "id": 8
+  },
+  {
+    "title": "undefined",
+    "price": null,
+    "thumbnail": "undefined",
+    "id": 9
   }
 ]

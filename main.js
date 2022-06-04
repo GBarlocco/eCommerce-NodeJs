@@ -3,6 +3,8 @@ const { Router } = express;
 
 const CrudProductos = require(`./dataBase/crudProductos`);
 
+const CrudCarritos = require(`./dataBase/crudCarritos`);
+
 const app = express();
 
 app.use(express.json());
@@ -12,6 +14,7 @@ app.use(express.static(`public`));
 
 const productosRouter = Router();
 const carritoRouter = Router();
+
 
 app.use(`/api/productos`, productosRouter);
 app.use(`/api/carrito`, carritoRouter);
@@ -26,6 +29,7 @@ server.on(`error`, err => console.log(`error en el servidor ${err}`));
 
 
 let myCrudProductos = new CrudProductos(`./dataBase/productos.txt`);
+let myCrudCarritos = new CrudCarritos(`./dataBase/carritos.txt`);
 
 productosRouter.get(`/`, (req, res) => {
     ; (async () => {
@@ -72,7 +76,6 @@ productosRouter.post(`/`, (req, res) => {
             price: price,
             thumbnail: `${url}`
         };
-        console.table(newProducto);
         const id = await myCrudProductos.save(newProducto);
 
         return res.json(`El id asignado es ${id}`);
@@ -115,13 +118,74 @@ productosRouter.delete(`/:id`, (req, res) => {
     })();
 });
 
-carritoRouter.get(`/:id`, (req, res) => {
+carritoRouter.get(`/:id/productos`, (req, res) => {
+    ; (async () => {
+        try {
+            let productsbyId = await myCrudCarritos.getProductsByID(req.params.id);
+            if (productsbyId.length == 0) {
+                return res.json(`El carrito se encuentra vacío`);
+            } else {
+                return res.json(productsbyId);
+            }
+        } catch (err) {
+            return res.status(404).json({
+                error: `Error ${err}`
+            });
+        }
+    })();
 });
 
 carritoRouter.post(`/`, (req, res) => {
+    ; (async () => {
+        const id = await myCrudCarritos.create();
+        return res.json(`Nuevo carrito asignado, ID: ${id}`);
+    })();
 });
 
-carritoRouter.post(`/:id`, (req, res) => {
+
+carritoRouter.post(`/:idCar/:idProd`, (req, res) => {
+    ; (async () => {
+        let idCart = Number(req.params.idCar);
+        let idProduct = req.params.idProd;
+
+        try {
+            let allCarts = await myCrudCarritos.getAll();
+
+            const cartIndex = allCarts.findIndex(cart => cart.id === idCart);
+
+            if (cartIndex < 0) {
+                return res.status(401).json({
+                    error: "carrito no encontrado"
+                });
+            };
+
+            let cart = await myCrudCarritos.getCartById(idCart);
+
+            if (cart.length == 0) {
+                return res.status(404).json({
+                    error: `Error no se encontro el carrito`
+                });
+            };
+
+            let productbyId = await myCrudProductos.getById(idProduct);
+
+            if (productbyId.length == 0) {
+                return res.status(404).json({
+                    error: `Error producto no encontrado`
+                });
+            };
+
+            allCarts[cartIndex].products.push(productbyId[0]);
+            
+            await myCrudCarritos.write(allCarts, `producto agregado al carrito`);
+            return res.json(`Se agregó el producto con id ${idProduct} al carrito con id ${idCart}`);
+
+        } catch (err) {
+            return res.status(404).json({
+                error: `Error ${err}`
+            });
+        }
+    })();
 });
 
 carritoRouter.delete(`/:id`, (req, res) => {
