@@ -44,7 +44,18 @@
   {
     "id": 3,
     "timestamp": "Sat Jun 04 2022",
-    "products": []
+    "products": [
+      {
+        "timestamp": "Sat Jun 04 2022",
+        "nombre": "Producto8",
+        "descripcion": "descripcion8",
+        "codigo": 8,
+        "thumbnail": "url8",
+        "precio": 8,
+        "stock": 8,
+        "id": 8
+      }
+    ]
   },
   {
     "id": 4,
