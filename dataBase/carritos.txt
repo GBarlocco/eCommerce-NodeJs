@@ -26,22 +26,6 @@
     ]
   },
   {
-    "id": 2,
-    "timestamp": "Sat Jun 04 2022",
-    "products": [
-      {
-        "timestamp": "Sat Jun 04 2022",
-        "nombre": "Producto7",
-        "descripcion": "descripcion7",
-        "codigo": 7,
-        "thumbnail": "url7",
-        "precio": 7,
-        "stock": 7,
-        "id": 7
-      }
-    ]
-  },
-  {
     "id": 3,
     "timestamp": "Sat Jun 04 2022",
     "products": [
