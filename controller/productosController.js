@@ -1,12 +1,9 @@
-const { Router } = require("express");
 const CrudProductos = require(`../dataBase/crudProductos`);
-
-const productosRouter = Router();
 
 let myCrudProductos = new CrudProductos(`./database/productos.txt`);
 let administrator = true;
 
-productosRouter.get(`/`, async (req, res) => {
+const getAllProducts = async (req, res) => {
     try {
         let allProducts = await myCrudProductos.getAll();
         return res.json(allProducts);
@@ -15,9 +12,9 @@ productosRouter.get(`/`, async (req, res) => {
             error: `Error ${err}`
         });
     }
-});
+}
 
-productosRouter.get(`/:id`, async (req, res) => {
+const getProductById = async (req, res) => {
     try {
         let productbyId = await myCrudProductos.getById(req.params.id);
         if (productbyId.length == 0) {
@@ -32,9 +29,9 @@ productosRouter.get(`/:id`, async (req, res) => {
             error: `Error ${err}`
         });
     }
-});
+}
 
-productosRouter.post(`/`, async (req, res) => {
+const addProduct = async (req, res) => {
     if (administrator) {
         try {
             const name = req.body.nombre;
@@ -67,9 +64,9 @@ productosRouter.post(`/`, async (req, res) => {
             error: `Ruta no permitida, no es usuario con perfil administrador.`
         });
     }
-});
+}
 
-productosRouter.put(`/:id`, async (req, res) => {
+const updateProductById = async (req, res) => {
     if (administrator) {
         try {
             const id = Number(req.params.id);
@@ -110,9 +107,9 @@ productosRouter.put(`/:id`, async (req, res) => {
             error: `Ruta no permitida, no es usuario con perfil administrador.`
         });
     }
-});
+}
 
-productosRouter.delete(`/:id`, async (req, res) => {
+const deleteProductById = async (req, res) => {
     if (administrator) {
         try {
             const id = Number(req.params.id);
@@ -129,6 +126,13 @@ productosRouter.delete(`/:id`, async (req, res) => {
             error: `Ruta no permitida, no es usuario con perfil administrador.`
         });
     }
-});
+}
 
-module.exports = productosRouter;
+module.exports = {
+    getAllProducts,
+    getProductById,
+    addProduct,
+    updateProductById,
+    deleteProductById,
+};
+

@@ -10,8 +10,8 @@
     "id": 1
   },
   {
-    "timestamp": "Sun Jun 05 2022",
-    "nombre": "Producto",
+    "timestamp": "Mon Jun 06 2022",
+    "nombre": "Producto update",
     "descripcion": "descripcion2",
     "codigo": 2,
     "thumbnail": "url2",
@@ -88,15 +88,5 @@
     "precio": 9,
     "stock": 9,
     "id": 9
-  },
-  {
-    "timestamp": "Sun Jun 05 2022",
-    "nombre": "Producto9",
-    "descripcion": "descripcion9",
-    "codigo": 9,
-    "thumbnail": "url9",
-    "precio": 9,
-    "stock": 9,
-    "id": 12
   }
 ]

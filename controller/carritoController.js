@@ -1,14 +1,10 @@
-const { Router } = require("express");
-
 const CrudCarritos = require(`../dataBase/crudCarritos`);
 const CrudProductos = require(`../dataBase/crudProductos`);
-
-const carritoRouter = Router();
 
 let myCrudCarritos = new CrudCarritos(`./dataBase/carritos.txt`);
 let myCrudProductos = new CrudProductos(`./database/productos.txt`);
 
-carritoRouter.get(`/:id/productos`, async (req, res) => {
+const getAllProductsByIdCart = async (req, res) => {
     try {
         let idCart = req.params.id;
         let productsbyId = await myCrudCarritos.getProductsByID(idCart);
@@ -22,9 +18,9 @@ carritoRouter.get(`/:id/productos`, async (req, res) => {
             error: `Error ${err}`
         });
     }
-});
+};
 
-carritoRouter.post(`/`, async (req, res) => {
+const createCart = async (req, res) => {
     try {
         const id = await myCrudCarritos.createCart();
         return res.json(`Nuevo carrito asignado, ID: ${id}`);
@@ -33,9 +29,9 @@ carritoRouter.post(`/`, async (req, res) => {
             error: `Error ${err}`
         });
     }
-});
+};
 
-carritoRouter.post(`/:idCar/:idProd`, async (req, res) => {
+const addProduct = async (req, res) => {
     try {
         let idCart = Number(req.params.idCar);
         let idProduct = req.params.idProd;
@@ -76,9 +72,9 @@ carritoRouter.post(`/:idCar/:idProd`, async (req, res) => {
             error: `Error ${err}`
         });
     }
-});
+};
 
-carritoRouter.delete(`/:id`, async (req, res) => {
+const deleteCartById = async (req, res) => {
     try {
         const idCart = Number(req.params.id);
 
@@ -89,9 +85,9 @@ carritoRouter.delete(`/:id`, async (req, res) => {
             error: `Error ${err}`
         });
     }
-});
+};
 
-carritoRouter.delete(`/:id/productos/:id_prod`, async (req, res) => {
+const deleteProductById = async (req, res) => {
     try {
         const idCart = Number(req.params.id);
         const idProduct = Number(req.params.id_prod);
@@ -104,6 +100,12 @@ carritoRouter.delete(`/:id/productos/:id_prod`, async (req, res) => {
             error: `Error ${err}`
         });
     }
-});
+};
 
-module.exports = carritoRouter;
+module.exports = {
+    getAllProductsByIdCart,
+    createCart,
+    addProduct,
+    deleteCartById,
+    deleteProductById
+};

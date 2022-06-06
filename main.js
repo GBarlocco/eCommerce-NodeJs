@@ -9,8 +9,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`public`));
 
 //Routers import
-const productosRouter = require("./routesControl/productosControlRouter");
-const carritoRouter = require("./routesControl/carritoControlRouter");
+const productosRouter = require("./routes/productosRouter");
+const carritoRouter = require("./routes/carritoRouter");
 
 //Routers
 app.use(`/api/productos`, productosRouter);
