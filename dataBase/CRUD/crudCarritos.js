@@ -2,6 +2,7 @@ const mongoDB = require(`../mongoDB`);
 const cartModel = require(`../models/carrito`);
 const productsModel = require(`../models/producto`);
 
+
 class Contenedor {
     constructor() {
     }
@@ -20,6 +21,7 @@ class Contenedor {
             .then(_ => cart.save())
             .then(document => document._id.toString())
             .catch(err => console.log(`Error: ${err.message}`));
+
     }
 
     async getProductsByID(idCart) {

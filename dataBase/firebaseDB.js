@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+const firebase = require("firebase");
+const { initializeApp } = require("firebase/app");
 
 const firebaseConfig = {
     apiKey: "AIzaSyBzyTHNr71KGnVa1HWvOy8oDJ_deejM9rs",
@@ -12,11 +12,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+const db = firebase.firestore();
 const queryCarritos = db.collection(`Carritos`);
 const queryProductos = db.collection(`Productos`);
 
-export default queryProductos;
 
-
+module.exports = {
+    queryProductos,
+};
 
