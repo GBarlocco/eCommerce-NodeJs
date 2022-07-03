@@ -1,3 +1,5 @@
+//Correspondiente al entregable 1 para persistir en txt
+
 const fs = require('fs');
 
 class Contenedor {

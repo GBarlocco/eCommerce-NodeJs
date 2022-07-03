@@ -88,5 +88,15 @@
     "precio": 9,
     "stock": 9,
     "id": 9
+  },
+  {
+    "timestamp": "Sun Jul 03 2022",
+    "nombre": "Producto9",
+    "descripcion": "descripcion9",
+    "codigo": 9,
+    "thumbnail": "url9",
+    "precio": 9,
+    "stock": 9,
+    "id": 10
   }
 ]

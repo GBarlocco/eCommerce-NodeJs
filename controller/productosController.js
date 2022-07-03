@@ -1,6 +1,6 @@
-const CrudProductos = require(`../dataBase/crudProductos`);
+const CrudProductos = require(`../dataBase/CRUD/crudProductos`);
 
-let myCrudProductos = new CrudProductos(`./database/productos.txt`);
+let myCrudProductos = new CrudProductos();
 let administrator = true;
 
 const getAllProducts = async (req, res) => {
@@ -16,8 +16,10 @@ const getAllProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {
     try {
-        let productbyId = await myCrudProductos.getById(req.params.id);
-        if (productbyId.length == 0) {
+        let idCart = req.params.id;
+        let productbyId = await myCrudProductos.getById(idCart);
+
+        if (!productbyId) {
             return res.status(404).json({
                 error: `Error producto no encontrado`
             });
@@ -53,7 +55,7 @@ const addProduct = async (req, res) => {
             };
             const id = await myCrudProductos.save(newProducto);
 
-            return res.json(`El id asignado es ${id}`);
+            return res.json(`Se agregó el nuevo producto`);
         } catch (err) {
             return res.status(404).json({
                 error: `Error ${err}`
@@ -69,7 +71,7 @@ const addProduct = async (req, res) => {
 const updateProductById = async (req, res) => {
     if (administrator) {
         try {
-            const id = Number(req.params.id);
+            const idProduct = req.params.id;
             const name = req.body.nombre;
             const price = Number(req.body.precio);
             const url = req.body.thumbnail;
@@ -78,24 +80,9 @@ const updateProductById = async (req, res) => {
             const code = Number(req.body.codigo);
             const stock = Number(req.body.stock);
 
-            let allProducts = await myCrudProductos.getAll();
-            const productIndex = allProducts.findIndex(product => product.id === id);
+            await myCrudProductos.updateById(idProduct, name, price, url, description, date, code, stock);
 
-            if (productIndex < 0) {
-                return res.status(401).json({
-                    error: "producto no encontrado"
-                });
-            }
-            allProducts[productIndex].nombre = name;
-            allProducts[productIndex].thumbnail = url;
-            allProducts[productIndex].timestamp = date;
-            allProducts[productIndex].descripcion = description;
-            allProducts[productIndex].codigo = code;
-            allProducts[productIndex].precio = price;
-            allProducts[productIndex].stock = stock;
-
-            await myCrudProductos.write(allProducts, `Mensaje modificado`);
-            return res.json(`Se actualizó el id ${id}`);
+            return res.json(`Se actualizó el producto `);
 
         } catch (err) {
             return res.status(404).json({
@@ -112,9 +99,8 @@ const updateProductById = async (req, res) => {
 const deleteProductById = async (req, res) => {
     if (administrator) {
         try {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             await myCrudProductos.deleteById(id);
-
             return res.json(`Se eliminó de forma correcta el ID:${id}`);
         } catch (err) {
             return res.status(404).json({
