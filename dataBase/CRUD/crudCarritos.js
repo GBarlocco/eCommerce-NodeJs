@@ -1,6 +1,7 @@
 const mongoDB = require(`../mongoDB`);
 const cartModel = require(`../models/carrito`);
 const productsModel = require(`../models/producto`);
+const { db } = require(`../firebaseDB`);
 
 
 class Contenedor {
@@ -13,6 +14,15 @@ class Contenedor {
             timestamp: date,
             products: []
         };
+
+        try {
+            const carrito = await db.collection(`carritos`).add({
+                nombre: `Hola`
+            });
+            console.log(carrito);
+        } catch (e) {
+            console.log(`Error: ${e.message}`);
+        }
 
         // Instancia del modelo carrito
         const cart = new cartModel(newCart);
