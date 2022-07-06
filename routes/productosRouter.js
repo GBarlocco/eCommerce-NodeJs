@@ -1,19 +1,30 @@
 const { Router } = require("express");
 
+//MongoDB
 const {
-    getAllProducts,
-    getProductById,
-    addProduct,
-    updateProductById,
-    deleteProductById,
-  } = require("../controller/productosController");
+  getAllProducts,
+  getProductById,
+  addProduct,
+  updateProductById,
+  deleteProductById,
+} = require("../controller/MongoDB/productosController");
+
+//Firebase
+const {
+  getAllProductsF,
+  getProductByIdF,
+  addProductF,
+  updateProductByIdF,
+  deleteProductByIdF,
+} = require("../controller/firebase/productosController");
 
 const productosRouter = Router();
 
-productosRouter.get(`/`, getAllProducts);
-productosRouter.get(`/:id`, getProductById);
-productosRouter.post(`/`, addProduct);
-productosRouter.put(`/:id`, updateProductById);
-productosRouter.delete(`/:id`, deleteProductById);
+//Modo prueba: cambiar las funciones si se desea utilizar MongoDB o firebase
+productosRouter.get(`/`, getAllProductsF);
+productosRouter.get(`/:id`, getProductByIdF);
+productosRouter.post(`/`, addProductF);
+productosRouter.put(`/:id`, updateProductByIdF);
+productosRouter.delete(`/:id`, deleteProductByIdF);
 
 module.exports = productosRouter;

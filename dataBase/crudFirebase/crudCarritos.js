@@ -1,13 +1,10 @@
-const mongoDB = require(`../mongoDB`);
-const cartModel = require(`../models/carrito`);
-const productsModel = require(`../models/producto`);
-const { db } = require(`../firebaseDB`);
-
+const { queryCarritos, queryProductos, FieldValue } = require(`../firebaseDB`);
 
 class Contenedor {
     constructor() {
     }
 
+    //LISTO, PROBADA
     async createCart() {
         let date = new Date();
         let newCart = {
@@ -16,23 +13,59 @@ class Contenedor {
         };
 
         try {
-            const carrito = await db.collection(`carritos`).add({
-                nombre: `Hola`
-            });
-            console.log(carrito);
+            const carrito = await queryCarritos.add(newCart);
         } catch (e) {
             console.log(`Error: ${e.message}`);
         }
-
-        // Instancia del modelo carrito
-        const cart = new cartModel(newCart);
-
-        mongoDB
-            .then(_ => cart.save())
-            .then(document => document._id.toString())
-            .catch(err => console.log(`Error: ${err.message}`));
-
     }
+
+    async addProduct(idCart, idProduct) {
+        const docCarts = queryCarritos.doc(idCart);
+        const docProducts = queryProductos.doc(idProduct);
+
+        try {
+            const response = await docProducts.get();
+            const product = {
+                id: response.id,
+                ...response.data()
+            };
+
+            const docsCarts = await queryCarritos.get();
+
+            let allProducts = docsCarts.docs.map(doc => {
+                return doc.data().products;
+            });
+            console.log('Todos los productos en el carrito:');
+            console.log(allProducts);
+
+            allProducts.push(product);
+            console.log('Carrito actualizado:');
+            console.log(allProducts);
+
+            await docCarts.update({
+                'products': FieldValue.arrayUnion([])
+            });
+
+            await docCarts.update({
+                'products': FieldValue.arrayUnion(allProducts)
+            });
+
+        } catch (e) {
+            console.log(`Error: ${e.message}`);
+        }
+    }
+
+    //LISTO, PROBADA
+    async deleteCartById(idCart) {
+        const docsCart = queryCarritos.doc(idCart);
+        try {
+            const productDelete = await docsCart.delete();
+        } catch (e) {
+            throw Error(`Error en deleteById: ${e.message}`);
+        }
+    }
+
+    /*
 
     async getProductsByID(idCart) {
         try {
@@ -46,15 +79,6 @@ class Contenedor {
         } catch (error) {
             throw Error(`Error en getById`);
         }
-    }
-
-    async deleteCartById(idCart) {
-        mongoDB
-            .then(_ => cartModel.deleteOne({
-                _id: idCart
-            }))
-            .then(result => console.log(result))
-            .catch(err => console.log(`Error: ${err.message}`))
     }
 
     async addProduct(idCart, idProduct) {
@@ -104,6 +128,7 @@ class Contenedor {
             throw Error(`Error  ${err}`);
         }
     }
+    */
 
 }
 module.exports = Contenedor;

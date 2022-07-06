@@ -1,17 +1,18 @@
 const admin = require('firebase-admin');
-const { applicationDefault } = require(`firebase-admin/app`);
-
-require('dotenv').config();
+const serviceAccount = require('./keyFirebase.json');
 
 admin.initializeApp({
-    credential: applicationDefault(),
+    credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://ecommerce-be-53ba3.firebaseio.com'
-});
+})
+const FieldValue = admin.firestore.FieldValue;
 
 const db = admin.firestore();
+const queryCarritos = db.collection('carritos');
+const queryProductos = db.collection('productos');
 
 module.exports = {
-    db
+    queryCarritos,
+    queryProductos,
+    FieldValue
 };
-
-

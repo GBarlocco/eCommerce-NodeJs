@@ -1,9 +1,10 @@
-const CrudProductos = require(`../dataBase/CRUD/crudProductos`);
+//Para realizar CRUD con firebase:
+const CrudProductos = require(`../../dataBase/crudFirebase/crudProductos`);
 
 let myCrudProductos = new CrudProductos();
 let administrator = true;
 
-const getAllProducts = async (req, res) => {
+const getAllProductsF = async (req, res) => {
     try {
         let allProducts = await myCrudProductos.getAll();
         return res.json(allProducts);
@@ -14,7 +15,7 @@ const getAllProducts = async (req, res) => {
     }
 }
 
-const getProductById = async (req, res) => {
+const getProductByIdF = async (req, res) => {
     try {
         let idCart = req.params.id;
         let productbyId = await myCrudProductos.getById(idCart);
@@ -33,7 +34,7 @@ const getProductById = async (req, res) => {
     }
 }
 
-const addProduct = async (req, res) => {
+const addProductF = async (req, res) => {
     if (administrator) {
         try {
             const name = req.body.nombre;
@@ -68,7 +69,7 @@ const addProduct = async (req, res) => {
     }
 }
 
-const updateProductById = async (req, res) => {
+const updateProductByIdF = async (req, res) => {
     if (administrator) {
         try {
             const idProduct = req.params.id;
@@ -96,7 +97,7 @@ const updateProductById = async (req, res) => {
     }
 }
 
-const deleteProductById = async (req, res) => {
+const deleteProductByIdF = async (req, res) => {
     if (administrator) {
         try {
             const id = req.params.id;
@@ -115,10 +116,10 @@ const deleteProductById = async (req, res) => {
 }
 
 module.exports = {
-    getAllProducts,
-    getProductById,
-    addProduct,
-    updateProductById,
-    deleteProductById,
+    getAllProductsF,
+    getProductByIdF,
+    addProductF,
+    updateProductByIdF,
+    deleteProductByIdF,
 };
 
