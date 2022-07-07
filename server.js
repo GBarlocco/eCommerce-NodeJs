@@ -1,5 +1,4 @@
 const express = require(`express`);
-const { Router } = express;
 
 const app = express();
 
@@ -27,6 +26,5 @@ const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT, () => console.log(`Servidor HHTP escuchando puerto ${PORT}`));
 
 server.on(`error`, err => console.log(`error en el servidor ${err}`));
-
 
 

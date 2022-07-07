@@ -1,40 +1,10 @@
-//Para realizar CRUD con firebase:
-const CrudProductos = require(`../../dataBase/crudFirebase/crudProductos`);
-
-let myCrudProductos = new CrudProductos();
 let administrator = true;
 
-const getAllProductsF = async (req, res) => {
-    try {
-        let allProducts = await myCrudProductos.getAll();
-        return res.json(allProducts);
-    } catch (err) {
-        return res.status(404).json({
-            error: `Error ${err}`
-        });
-    }
-}
+const storage = require(`../daos/index`);
 
-const getProductByIdF = async (req, res) => {
-    try {
-        let idCart = req.params.id;
-        let productbyId = await myCrudProductos.getById(idCart);
+const productsStorage = storage().productos;
 
-        if (!productbyId) {
-            return res.status(404).json({
-                error: `Error producto no encontrado`
-            });
-        } else {
-            return res.json(productbyId);
-        }
-    } catch (err) {
-        return res.status(404).json({
-            error: `Error ${err}`
-        });
-    }
-}
-
-const addProductF = async (req, res) => {
+const addProduct = async (req, res) => {
     if (administrator) {
         try {
             const name = req.body.nombre;
@@ -54,12 +24,12 @@ const addProductF = async (req, res) => {
                 precio: price,
                 stock: stock
             };
-            const id = await myCrudProductos.save(newProducto);
+            const id = await productsStorage.save(newProducto);
 
             return res.json(`Se agregó el nuevo producto`);
         } catch (err) {
             return res.status(404).json({
-                error: `Error ${err}`
+                error: `Error al crear un producto ${err}`
             });
         }
     } else {
@@ -69,7 +39,37 @@ const addProductF = async (req, res) => {
     }
 }
 
-const updateProductByIdF = async (req, res) => {
+const getAllProducts = async (req, res) => {
+    try {
+        let allProducts = await productsStorage.getAll();
+        return res.json(allProducts);
+    } catch (err) {
+        return res.status(404).json({
+            error: `Error al obtener todos los productos${err}`
+        });
+    }
+}
+
+const getProductById = async (req, res) => {
+    try {
+        let idCart = req.params.id;
+        let productbyId = await productsStorage.getById(idCart);
+
+        if (!productbyId) {
+            return res.status(404).json({
+                error: `Error producto no encontrado`
+            });
+        } else {
+            return res.json(productbyId);
+        }
+    } catch (err) {
+        return res.status(404).json({
+            error: `Error al obtener el producto por id ${err}`
+        });
+    }
+}
+
+const updateProductById = async (req, res) => {
     if (administrator) {
         try {
             const idProduct = req.params.id;
@@ -81,13 +81,12 @@ const updateProductByIdF = async (req, res) => {
             const code = Number(req.body.codigo);
             const stock = Number(req.body.stock);
 
-            await myCrudProductos.updateById(idProduct, name, price, url, description, date, code, stock);
+            await productsStorage.updateById(idProduct, name, price, url, description, date, code, stock);
 
             return res.json(`Se actualizó el producto `);
-
         } catch (err) {
             return res.status(404).json({
-                error: `Error ${err}`
+                error: `Error al actualizar un producto ${err}`
             });
         }
     } else {
@@ -97,15 +96,15 @@ const updateProductByIdF = async (req, res) => {
     }
 }
 
-const deleteProductByIdF = async (req, res) => {
+const deleteProductById = async (req, res) => {
     if (administrator) {
         try {
             const id = req.params.id;
-            await myCrudProductos.deleteById(id);
+            await productsStorage.deleteById(id);
             return res.json(`Se eliminó de forma correcta el ID:${id}`);
         } catch (err) {
             return res.status(404).json({
-                error: `Error ${err}`
+                error: `Error al borrar un producto por id ${err}`
             });
         }
     } else {
@@ -116,10 +115,10 @@ const deleteProductByIdF = async (req, res) => {
 }
 
 module.exports = {
-    getAllProductsF,
-    getProductByIdF,
-    addProductF,
-    updateProductByIdF,
-    deleteProductByIdF,
+    getAllProducts,
+    getProductById,
+    addProduct,
+    updateProductById,
+    deleteProductById,
 };
 

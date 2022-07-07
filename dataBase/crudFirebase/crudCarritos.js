@@ -1,7 +1,8 @@
-const { queryCarritos, queryProductos, FieldValue } = require(`../firebaseDB`);
-
 class Contenedor {
-    constructor() {
+    constructor(queryCarritos, queryProductos, FieldValue) {
+        this.queryCarritos = queryCarritos;
+        this.queryProductos = queryProductos;
+        this.FieldValue = FieldValue;
     }
 
     //LISTO, PROBADA
@@ -11,124 +12,62 @@ class Contenedor {
             timestamp: date,
             products: []
         };
-
-        try {
-            const carrito = await queryCarritos.add(newCart);
-        } catch (e) {
-            console.log(`Error: ${e.message}`);
-        }
+        await this.queryCarritos.add(newCart);
     }
 
+    //LISTO, PROBADA
+    async getProductsByID(idCart) {
+        const docsCarts = await this.queryCarritos.doc(idCart);
+        const response = await docsCarts.get();
+
+        return response.data().products;
+    }
+
+    //LISTO, PROBADA
     async addProduct(idCart, idProduct) {
-        const docCarts = queryCarritos.doc(idCart);
-        const docProducts = queryProductos.doc(idProduct);
+        const docCarts = this.queryCarritos.doc(idCart);
+        const docProducts = this.queryProductos.doc(idProduct);
 
-        try {
-            const response = await docProducts.get();
-            const product = {
-                id: response.id,
-                ...response.data()
-            };
+        const response = await docProducts.get();
+        const product = {
+            id: response.id,
+            ...response.data()
+        };
 
-            const docsCarts = await queryCarritos.get();
-
-            let allProducts = docsCarts.docs.map(doc => {
-                return doc.data().products;
-            });
-            console.log('Todos los productos en el carrito:');
-            console.log(allProducts);
-
-            allProducts.push(product);
-            console.log('Carrito actualizado:');
-            console.log(allProducts);
-
-            await docCarts.update({
-                'products': FieldValue.arrayUnion([])
-            });
-
-            await docCarts.update({
-                'products': FieldValue.arrayUnion(allProducts)
-            });
-
-        } catch (e) {
-            console.log(`Error: ${e.message}`);
-        }
+        await docCarts.update({
+            products: this.FieldValue.arrayUnion(product)
+        });
     }
 
     //LISTO, PROBADA
     async deleteCartById(idCart) {
-        const docsCart = queryCarritos.doc(idCart);
-        try {
-            const productDelete = await docsCart.delete();
-        } catch (e) {
-            throw Error(`Error en deleteById: ${e.message}`);
-        }
+        const docsCart = this.queryCarritos.doc(idCart);
+
+        await docsCart.delete();
     }
 
-    /*
-
-    async getProductsByID(idCart) {
-        try {
-            let docs = false
-            docs = await cartModel.findOne({ _id: idCart }, { __v: 0 });
-            if (docs) {
-                return docs.products;
-            } else {
-                return false;
-            }
-        } catch (error) {
-            throw Error(`Error en getById`);
-        }
-    }
-
-    async addProduct(idCart, idProduct) {
-        try {
-            let docCart = false;
-            let docProduct = false
-
-            docCart = await cartModel.findOne({ _id: idCart }, { __v: 0 });
-            docProduct = await productsModel.findOne({ _id: idProduct }, { __v: 0 });
-
-            if (docCart && docProduct) {
-
-                docCart.products.push(docProduct);
-                return docCart.save();
-            } else {
-                throw Error(`Error al acceder al id del carrito / producto`);
-            }
-
-        } catch (error) {
-            throw Error(`Error en addProduct`);
-        }
-    }
-
+    //LISTO, PROBADA
     async deleteProductById(idCart, idProduct) {
-        try {
-            let docCart = false;
-            let docProduct = false
+        const docProduct = this.queryProductos.doc(idProduct);
+        const deleteProduct = await docProduct.get();
 
-            docCart = await cartModel.findOne({ _id: idCart }, { __v: 0 });
-            docProduct = await productsModel.findOne({ _id: idProduct }, { __v: 0 });
+        const docCart = await this.queryCarritos.doc(idCart);
+        const cart = await docCart.get();
 
-            if (docCart && docProduct) {
-                let allProductsFromCart = docCart.products;
-                let products = [];
+        const allProducts = cart.data().products;
 
-                for (let i = 0; i <= allProductsFromCart.length - 1; i++) {
-                    if (allProductsFromCart[i]._id.toString() != docProduct._id.toString()) {
-                        products.push(allProductsFromCart[i]);
-                    }
-                }
-                docCart.products = products;
-                return docCart.save();
-            } else {
-                throw Error(`Error al acceder al id del carrito / producto`);
+        let productDelete = {};
+
+        allProducts.forEach(product => {
+            if (product.id == deleteProduct.id) {
+                productDelete = product;
             }
-        } catch (err) {
-            throw Error(`Error  ${err}`);
-        }
-    }
-    */
+        });
 
+        await docCart.update({
+            products: this.FieldValue.arrayRemove(productDelete)
+        });
+
+    }
 }
 module.exports = Contenedor;

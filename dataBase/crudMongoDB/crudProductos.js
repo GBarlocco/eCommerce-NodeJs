@@ -1,15 +1,14 @@
-const mongoDB = require(`../mongoDB`);
-const productsModel = require(`../models/producto`);
-
 class Contenedor {
-    constructor() {
+    constructor(mongoDB, productsModel) {
+        this.mongoDB = mongoDB;
+        this.productsModel = productsModel;
     }
 
     async save(product) {
         // Instancia del modelo Producto
-        product = new productsModel(product);
+        product = new this.productsModel(product);
 
-        mongoDB
+        this.mongoDB
             .then(_ => product.save())
             .then(document => document)
             .catch(err => console.log(`Error: ${err.message}`));
@@ -18,7 +17,7 @@ class Contenedor {
     async getAll() {
         try {
             let docs = false;
-            docs = await productsModel.find();
+            docs = await this.productsModel.find();
             if (docs) {
                 return docs;
             } else {
@@ -32,7 +31,7 @@ class Contenedor {
     async getById(idProduct) {
         try {
             let doc = false;
-            doc = await productsModel.findOne({ _id: idProduct }, { __v: 0 });
+            doc = await this.productsModel.findOne({ _id: idProduct }, { __v: 0 });
 
             if (doc) {
                 return doc;
@@ -45,8 +44,8 @@ class Contenedor {
     }
 
     async deleteById(idProduct) {
-        mongoDB
-            .then(_ => productsModel.deleteOne({
+        this.mongoDB
+            .then(_ => this.productsModel.deleteOne({
                 _id: idProduct
             }))
             .catch(err => console.log(`Error: ${err.message}`))
@@ -55,8 +54,8 @@ class Contenedor {
 
     async updateById(idProduct, name, price, url, description, date, code, stock) {
 
-        mongoDB
-            .then(_ => productsModel.findOne({ _id: idProduct }, { __v: 0 }))
+        this.mongoDB
+            .then(_ => this.productsModel.findOne({ _id: idProduct }, { __v: 0 }))
             .then(product => {
                 product.nombre = name;
                 product.precio = price;

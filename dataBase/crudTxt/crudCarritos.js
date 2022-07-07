@@ -1,15 +1,12 @@
-//Correspondiente al entregable 1 para persistir en txt
-
-const fs = require('fs');
-
 class Contenedor {
-    constructor(archivo) {
+    constructor(archivo, fs) {
         this.archivo = archivo;
+        this.fs = fs;
     }
 
     async read() {
         try {
-            let data = await fs.promises.readFile(`./${this.archivo}`, `utf-8`);
+            let data = await this.fs.promises.readFile(`./${this.archivo}`, `utf-8`);
             return data;
 
         } catch (err) {
@@ -19,7 +16,7 @@ class Contenedor {
 
     async write(datos, msg) {
         try {
-            await fs.promises.writeFile(`./${this.archivo}`, JSON.stringify(datos, null, 2));
+            await this.fs.promises.writeFile(`./${this.archivo}`, JSON.stringify(datos, null, 2));
             console.log(msg);
         } catch (err) {
             throw Error(`Error al escribir en el archivo ${err}`);

@@ -43,13 +43,33 @@ id, timestamp(carrito), productos: { id, timestamp(producto), nombre, descripcio
 
 5- Realizar la prueba de funcionalidad completa en el ámbito local (puerto 8080) y en glitch.com
 
+
+# Segunda entrega del proyecto final
+
+## Consigna:
+Basándose en los contenedores ya desarrollados (memoria, archivos) desarrollar dos contenedores más (que cumplan con la misma interfaz) que permitan realizar las operaciones básicas de CRUD en MongoDb (ya sea local o remoto) y en Firebase. Luego, para cada contenedor, crear dos clases derivadas, una para trabajar con Productos, y otra para trabajar con Carritos.
+
+### Aspectos a incluir en el entregable: 
+1- A las clases derivadas de los contenedores se las conoce como DAOs (Data Access Objects), y pueden ir todas incluidas en una misma carpeta de ‘daos’.
+
+2- En la carpeta de daos, incluir un archivo que importe todas las clases y exporte una instancia de dao de productos y una de dao de carritos, según corresponda. Esta decisión se tomará en base al valor de una variable de entorno cargada al momento de ejecutar el servidor (opcional: investigar el uso de imports dinámicos).
+
+3- Incluir un archivo de configuración (config) que contenga los datos correspondientes para conectarse a las bases de datos o medio de persistencia que corresponda.
+
+### Opcional:
+4- Hacer lo mismo para bases de datos relacionales: MariaDB/SQLite3.
+
+
+## Observaciones:
+- Entregable 2: si se desea cambiar la DB a utilizar forzando una variable: daos/index.js --> storage = "firebase", storage = "MongoDB", storage = "archivo"
+
 ## Test API - Postman
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white)
 > [Documentación API](https://documenter.getpostman.com/view/15433212/Uz5FLHXE#cfec1e21-3b0d-44e3-bc97-65aa64bf9392)
 
 ## Scripts
 
-#### Backend: `nodemon main.js`
+#### Backend: `nodemon server.js`
 Run the application locally
 [http://localhost:8080/](http://localhost:8080/)
 
