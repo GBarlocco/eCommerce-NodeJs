@@ -3,12 +3,10 @@ class Contenedor {
         this.queryProductos = queryProductos;
     }
 
-    //LISTO, PROBADA
     async save(product) {
         await this.queryProductos.add(product);
     }
 
-    //LISTO, PROBADA
     async getAll() {
         const docsProducts = await this.queryProductos.get();
 
@@ -21,7 +19,6 @@ class Contenedor {
         return allProducts;
     }
 
-    //LISTO, PROBADA
     async getById(idProduct) {
         const docsProducts = this.queryProductos.doc(idProduct);
         const response = await docsProducts.get();
@@ -33,7 +30,6 @@ class Contenedor {
         return product;
     }
 
-    //LISTO, PROBADA
     async updateById(idProduct, name, price, url, description, date, code, stock) {
         const docsProducts = this.queryProductos.doc(idProduct);
 
@@ -48,8 +44,7 @@ class Contenedor {
         });
 
     }
-
-    //LISTO, PROBADA
+    
     async deleteById(idProduct) {
         console.log(idProduct);
         const docsProducts = this.queryProductos.doc(idProduct);

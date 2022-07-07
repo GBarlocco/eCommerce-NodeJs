@@ -5,7 +5,6 @@ class Contenedor {
         this.FieldValue = FieldValue;
     }
 
-    //LISTO, PROBADA
     async createCart() {
         let date = new Date();
         let newCart = {
@@ -15,7 +14,6 @@ class Contenedor {
         await this.queryCarritos.add(newCart);
     }
 
-    //LISTO, PROBADA
     async getProductsByID(idCart) {
         const docsCarts = await this.queryCarritos.doc(idCart);
         const response = await docsCarts.get();
@@ -23,7 +21,6 @@ class Contenedor {
         return response.data().products;
     }
 
-    //LISTO, PROBADA
     async addProduct(idCart, idProduct) {
         const docCarts = this.queryCarritos.doc(idCart);
         const docProducts = this.queryProductos.doc(idProduct);
@@ -39,14 +36,12 @@ class Contenedor {
         });
     }
 
-    //LISTO, PROBADA
     async deleteCartById(idCart) {
         const docsCart = this.queryCarritos.doc(idCart);
 
         await docsCart.delete();
     }
 
-    //LISTO, PROBADA
     async deleteProductById(idCart, idProduct) {
         const docProduct = this.queryProductos.doc(idProduct);
         const deleteProduct = await docProduct.get();
